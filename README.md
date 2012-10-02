@@ -5,7 +5,7 @@ The little lightbox that could
 
 There are a great number of jQuery lightboxes out there. Come of them have an extensive feature set, some are plain bulky for no reason.
 
-Mjulb is - to my knowledge - the smallest, simplest and most badass single file jQuery plugin, that _just does it's job_. There are precious few things to configure, but it's tiny, and super simple to use. Mjulb also includes CSS in a separate file, so you can design most aspects of it to fit your particular application design.
+Mjulb is - to my knowledge - the smallest, simplest and most badass single file jQuery plugin, that _just does it's job_. Mjulb also includes CSS in a separate file, so you can design most aspects of it to fit your particular application design.
 
 ### Usage
 

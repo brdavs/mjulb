@@ -1,3 +1,9 @@
+= 0.0.1 / 2012-10-02
+
+  * Fixed README.md to include proper js code blocks.
+
+  * Fixed tlb(); to mjulb();
+
 = 0.0.1 / 2012-10-01
 
   * Initial upload and repository creation.
