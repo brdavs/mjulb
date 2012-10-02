@@ -1,5 +1,5 @@
 (function( $ ){
-  $.fn.tlb = function(opt) {
+  $.fn.mjulb = function(opt) {
     var opt = typeof(opt) == 'undefined' ? {} : opt;
     opt['scaling'] = typeof(opt['scaling']) == 'undefined' ? .9 : opt['scaling'];
     opt['transition'] = typeof(opt['transition']) == 'undefined' ? 300 : opt['transition'];
