@@ -17,21 +17,19 @@ $(function() {
 });
 ```
 
-There are only three options you can change, if you dislike the defaults:
+There are only two options you can change, if you dislike the defaults:
 
 ```javascript
 $(function() {
   $('a.common_class').mjulb({
     scaling: 0.9, 
-    transition: 300, 
-    imageband: true
+    transition: 300
   });
 });
 ```
 
-- **scaling:** This scales the lightboxed image to maximum percentage of width or height (depending on aspects of image and screen).  
+- **scaling:** This scales the lightboxed image to maximum extent (0 to 1) of width or height (depending on aspects of image and screen).  
 - **transition:** Time needed for image blending and (possibly) other effects.
-- **imageband:** Will render and additional navigational image bar at the bottom of the screen if set to anything other than nil.
 
 You can separate several lightboxes on your page by simply grouping them with appropriate class. Any group of 'a' tags will become a lightbox group on their own, when used in this manner:
 
@@ -47,7 +45,7 @@ $(function() {
 
 1. This is an image lightbox. It expects a href with an image.
 2. Currently the image size calculation is broken in jQuery 1.8.4. Use jQuery 1.7.2 to do the job.
-4. Does not work under IE9 yet. Support for IE8 is planned, but I am ni no rush.
+4. Does not IE8 or lower. Support is planned, but I am ni no rush. Nudge me if you need this.
 5. This software is released under the terms of GPLv3 (http://www.gnu.org/copyleft/gpl.html) or later licence. If you cannot accept the terms offered, you may not use mjulb.
 
 

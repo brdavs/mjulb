@@ -18,6 +18,10 @@
 (function( $ ){
   $.fn.mjulb = function(opt) {
     var opt = typeof(opt) == 'undefined' ? {} : opt;
+    var dw = $(document).width();
+    var dh = $(document).height();
+    var ww = $(window).width();
+    var wh = $(window).height();
     opt['scaling'] = typeof(opt['scaling']) == 'undefined' ? .9 : opt['scaling'];
     opt['transition'] = typeof(opt['transition']) == 'undefined' ? 300 : opt['transition'];
     opt['imageband'] = typeof(opt['imageband']) == 'undefined' ? false : opt['imageband'];
@@ -30,23 +34,21 @@
     
     // Scale an image to factor
     function scale(img, factor) {
-      dw = $(window).width();
-      dh = $(window).height();
-      wasp = dw / dh;
+      wasp = ww / wh;
       iasp = img.width / img.height;
       if ( wasp > iasp ) {
         return {
-          top: dh/2-dh*factor/2 + $(window).scrollTop(),
-          left: dw/2-dh*factor*iasp/2,
-          width: dh*factor*iasp, 
-          height: dh*factor, 
+          top: wh/2-wh*factor/2 + $(window).scrollTop(),
+          left: ww/2-wh*factor*iasp/2,
+          width: wh*factor*iasp, 
+          height: wh*factor, 
           apect: iasp }
       } else {
         return {
-          top: dh/2-dw*factor*iasp/2 + $(window).scrollTop(),
-          left: dw/2-dh*factor/2,
-          width: dh*factor, 
-          height: dw*factor*iasp, 
+          top: wh/2-ww*factor*iasp/2 + $(window).scrollTop(),
+          left: ww/2-wh*factor/2,
+          width: wh*factor, 
+          height: ww*factor*iasp, 
           apect: iasp }
       }
     }
@@ -82,15 +84,15 @@
         $('#modal img').css({display: 'none'}).attr({src: href});
       });
     }
-      
+    
     // Galery image
     this.on('click', function(e) {
       e.preventDefault();
       var href = $(this).attr('href');
       $('body').append(modal);
       $('#modal').css({
-        width: $(document).width(),
-        height: $(document).height()
+        width: dw,
+        height: dh
       }).fadeIn();
       modal_changer(href);
     });
@@ -109,49 +111,6 @@
           $(this).remove();
         });
       }
-    });
-    
-    // Imageband
-    function imageband(content) {
-      var bandlength;
-      $('body').append('<div id="imageband"></div>');
-      $('#imageband').css({
-        display: 'none',
-        'z-index': 3
-      });
-      $('#imageband').append(content);
-      var bandlength = ($('#imageband .gallery .frame .image').outerWidth()+15)*allhrefs.length
-      $('#imageband .gallery').css({
-        position: 'absolute',
-        width: bandlength
-      });
-      $(document).mousemove(function(e) {
-        if ( e.pageY > $(document).scrollTop()+$(window).height()-200 ) {
-          $('#imageband').fadeIn(opt['transition']);
-        } else {
-          $('#imageband').fadeOut(opt['transition']);
-        }
-        positioning = -bandlength/$(window).width()*e.pageX+e.pageX;
-        $('#imageband .gallery').css({left: positioning});
-      });
-    }
-    if ( opt['imageband']!=false && $('.gallery.container').length>0 ) {
-      var map =  $.map(this, function(n,i) {
-        return '<div class="thumb frame">'+$(n).parent().html()+"</div>";
-      }).join('');
-      imageband('<div class="gallery">'+map+'</div>');
-    }
-    
-    // The #imageband's image
-    $(document).on('click', '#imageband .gallery .thumb.frame a', function(e) {
-      e.preventDefault();
-      var href = $(this).attr('href');
-      $('body').append(modal);
-      $('#modal').css({
-        width: $(document).width(),
-        height: $(document).height()
-      }).fadeIn();
-      modal_changer(href);
     });
   };
 })( jQuery );
