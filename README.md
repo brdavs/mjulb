@@ -45,7 +45,7 @@ $(function() {
 
 1. This is an image lightbox. It expects a href with an image.
 2. Currently the image size calculation is broken in jQuery 1.8.4. Use jQuery 1.7.2 to do the job.
-4. Does not IE8 or lower. Support is planned, but I am ni no rush. Nudge me if you need this.
+4. Does not work in IE8 or lower. Support is planned, but I am ni no rush. Nudge me if you need this.
 5. This software is released under the terms of GPLv3 (http://www.gnu.org/copyleft/gpl.html) or later licence. If you cannot accept the terms offered, you may not use mjulb.
 
 
