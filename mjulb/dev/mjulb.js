@@ -1,5 +1,5 @@
 /*  MJULB, a tiny lightbox for jQuery.
-    Copyright (C) 2011  Toni Anzlovar
+    Copyright (C) 2012  Toni Anzlovar
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

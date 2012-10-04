@@ -1,7 +1,7 @@
 mjulb
 =====
-The little lightbox that could
-------------------------------
+the world's smallest jQuery lightbox
+------------------------------------
 
 There are a great number of jQuery lightboxes out there. Come of them have an extensive feature set, some are plain bulky for no reason.
 
@@ -48,7 +48,7 @@ $(function() {
 4. Does not work in IE8 or lower. Support is planned, but I am ni no rush. Nudge me if you need this.
 5. This software is released under the terms of GPLv3 (http://www.gnu.org/copyleft/gpl.html) or later licence. If you cannot accept the terms offered, you may not use mjulb.
 
-
 ### Contact
-You may contact the author at toni [at] formalibre [dot] si.  
+You are welcome to visit (mjulb homepage)[http://mjulb.mutsu.org] for more information.  
+You may contact the author (Tony Anzlovar) at tony [at] formalibre [dot] si.  
 Should you whish to donate to the project - the author accepts alcohol as payment.
