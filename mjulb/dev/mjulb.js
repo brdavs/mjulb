@@ -1,4 +1,5 @@
-/*  MJULB, a tiny lightbox for jQuery.
+/*
+    MJULB, a tiny lightbox for jQuery.
     Copyright (C) 2012  Toni Anzlovar
 
     This program is free software: you can redistribute it and/or modify
@@ -15,102 +16,167 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-(function( $ ){
-  $.fn.mjulb = function(opt) {
-    var opt = typeof(opt) == 'undefined' ? {} : opt;
-    var dw = $(document).width();
-    var dh = $(document).height();
-    var ww = $(window).width();
-    var wh = $(window).height();
-    opt['scaling'] = typeof(opt['scaling']) == 'undefined' ? .9 : opt['scaling'];
-    opt['transition'] = typeof(opt['transition']) == 'undefined' ? 300 : opt['transition'];
-    opt['imageband'] = typeof(opt['imageband']) == 'undefined' ? false : opt['imageband'];
-    var scaling;
-    var m_img = '<div class="image"><a id="rw" href="#"><span>&#x25c0</span></a><a id="fw" href="#"><span>&#x25b6;</span></a></div><img/>';
-    var modal = '<div id="modal"><div id="blind"></div>'+m_img+'</div>';
-    var allhrefs=[]; $(this).map(function() {
-      allhrefs.push( $(this).attr('href') );
+var $,
+  __slice = [].slice;
+
+$ = jQuery;
+
+$.fn.extend({
+  mjulb: function() {
+    var all, b, d, dh, dw, e, mblind, modal_changer, s, scale, scaling, t, transition, w, wh, ww, _arg;
+    _arg = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    scaling = _arg.scaling, transition = _arg.transition;
+    b = $('body');
+    d = $(document);
+    w = $(window);
+    dw = d.width();
+    dh = d.height();
+    ww = w.width();
+    wh = w.height();
+    all = this.map(function() {
+      return $(this).attr('href');
     });
-    
-    // Scale an image to factor
-    function scale(img, factor) {
+    s = scaling != null ? scaling : scaling = 0.9;
+    t = transition != null ? transition : transition = 300;
+    e = function(o) {
+      var attr, k, v;
+      if (!o.content) {
+        o.content = '';
+      }
+      if (!o.el) {
+        o.el = 'div';
+      }
+      attr = (function() {
+        var _results;
+        _results = [];
+        for (k in o) {
+          v = o[k];
+          if (k !== 'el' && k !== 'content') {
+            _results.push("" + k + "='" + v + "'");
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      })();
+      if (o.el !== 'img') {
+        return "<" + o.el + " " + (attr.join(' ')) + ">" + o.content + "</" + o.el + ">";
+      } else {
+        return "<" + o.el + " " + (attr.join(' ')) + "/>";
+      }
+    };
+    mblind = e({
+      el: 'div',
+      id: 'modal',
+      content: [
+        e({
+          el: 'div',
+          id: 'blind',
+          style: "width:" + dw + "px; height:" + dh + "px"
+        }), [
+          e({
+            el: 'div',
+            "class": 'content',
+            content: [
+              e({
+                el: 'a',
+                id: 'rw'
+              }), e({
+                el: 'a',
+                id: 'fw'
+              })
+            ].join('')
+          }), e({
+            el: 'img'
+          })
+        ].join('')
+      ].join('')
+    });
+    scale = function(img) {
+      var iasp, nh, nw, out, wasp;
       wasp = ww / wh;
       iasp = img.width / img.height;
-      if ( wasp > iasp ) {
-        return {
-          top: wh/2-wh*factor/2 + $(window).scrollTop(),
-          left: ww/2-wh*factor*iasp/2,
-          width: wh*factor*iasp, 
-          height: wh*factor, 
-          apect: iasp }
+      nw = ww * s;
+      nh = wh * s;
+      if (wasp > 1) {
+        nw = nh * iasp;
       } else {
-        return {
-          top: wh/2-ww*factor*iasp/2 + $(window).scrollTop(),
-          left: ww/2-wh*factor/2,
-          width: wh*factor, 
-          height: ww*factor*iasp, 
-          apect: iasp }
+        nh = nw / iasp;
       }
-    }
-    
-    // Modal image changer
-    function modal_changer(href) {
-      var href_fw = allhrefs[$.inArray(href, allhrefs)+1];
-      var href_rw = allhrefs[$.inArray(href, allhrefs)-1];
-      $('#modal #fw').attr({href: href_fw});
-      $('#modal #rw').attr({href: href_rw});
-      $('<img/>').attr({src: href}).load(function() {
-        var scaling = scale(this, opt['scaling']);
-        var attributes = {
-          position: 'absolute',
-          display: 'none',
-          left: scaling['left'], 
-          top: scaling['top'], 
-          width: scaling['width'], 
-          height: scaling['height'], 
-          'background-image': 'url('+href+')',
-          'background-size': '100%',
-          'z-index': 1
-        }
-        if ( $('#modal .image').attr('style') ) {
-          $('<div class="temp"></div>').insertBefore('#modal .image');
-          $('#modal .temp').attr({style: $('#modal .image').attr('style') });
-        }
-        $('#modal .image').css(attributes).fadeIn(opt['transition'], function() {
-          $('#modal .temp').fadeOut(opt['transition'], function() {
-            $(this).remove();
-          });
-        });
-        $('#modal img').css({display: 'none'}).attr({src: href});
-      });
-    }
-    
-    // Galery image
+      return out = {
+        top: (wh - nh) / 2 + w.scrollTop(),
+        left: (ww - nw) / 2,
+        width: nw,
+        height: nh
+      };
+    };
     this.on('click', function(e) {
       e.preventDefault();
-      var href = $(this).attr('href');
-      $('body').append(modal);
-      $('#modal').css({
-        width: dw,
-        height: dh
-      }).fadeIn();
-      modal_changer(href);
+      b.append(mblind);
+      $('#modal').fadeIn();
+      return modal_changer($(this).attr('href'));
     });
-    
-    // Forward, Backward modal links
-    $(document).on('click', '#modal #rw, #modal #fw', function(e) {
+    d.on('click', '#modal #fw, #modal #rw', function(e) {
       e.preventDefault();
-      var href = $(this).attr('href');
-      modal_changer(href);
+      return modal_changer($(this).attr('href'));
     });
-    
-    // Modal fader
-    $(document).on('click', '#modal', function(e) {
-      if (e.target.id!='fw' && e.target.id!='rw') {
-        $(this).fadeOut('slow', function() {
-          $(this).remove();
+    d.on('click', '#modal', function(e) {
+      if (e.target.id !== 'fw' && e.target.id !== 'rw') {
+        return $(this).fadeOut('slow', function() {
+          return $(this).remove();
         });
       }
     });
-  };
-})( jQuery );
+    modal_changer = function(href) {
+      var fw, mc, mt, rw, temp, _name, _name1, _ref, _ref1;
+      rw = (_ref = all[_name = $.inArray(href, all) - 1]) != null ? _ref : all[_name] = all[all.length - 1];
+      fw = (_ref1 = all[_name1 = $.inArray(href, all) + 1]) != null ? _ref1 : all[_name1] = all[0];
+      $('#modal #fw').attr({
+        href: fw
+      });
+      $('#modal #rw').attr({
+        href: rw
+      });
+      mc = $('#modal .content');
+      mt = $('#modal .temp');
+      temp = e({
+        el: 'div',
+        "class": 'temp'
+      });
+      return $('<img/>').attr({
+        src: href
+      }).load(function() {
+        var attr, sc;
+        sc = scale(this);
+        attr = {
+          position: 'absolute',
+          display: 'none',
+          left: sc.left,
+          top: sc.top,
+          width: sc.width,
+          height: sc.height,
+          'background-image': "url('" + href + "')",
+          'background-size': '100%',
+          'z-index': 1
+        };
+        if (mc.attr('style')) {
+          $(temp).insertBefore(mc);
+          mt.attr({
+            style: mc.attr('style')
+          });
+        }
+        mc.css(attr).fadeIn(t, function() {
+          return mt.fadeOut(t, function() {
+            return $(this).remove();
+          });
+        });
+        return $('#modal img').css({
+          display: 'none'
+        }).attr({
+          src: href
+        });
+      });
+    };
+    return true;
+  }
+});

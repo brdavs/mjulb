@@ -1,3 +1,11 @@
+= 0.0.3 / 2012-10-15
+  
+  * Fixed the aspects of image in vertically positioned browser window.
+  
+  * Recoded the whole thing in coffeescript.
+  
+  * Gallery is now 'rolling'. Last image leas to first one and vice versa.
+  
 = 0.0.2 / 2012-10-02
 
   * Fixed README.md.

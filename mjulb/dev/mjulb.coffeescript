@@ -1,0 +1,139 @@
+###
+    MJULB, a tiny lightbox for jQuery.
+    Copyright (C) 2012  Toni Anzlovar
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+###
+$ = jQuery
+$.fn.extend
+  mjulb: ({scaling, transition}...) ->
+    b = $('body')
+    d = $(document)
+    w = $(window)
+    dw = d.width();
+    dh = d.height();
+    ww = w.width();
+    wh = w.height();
+    all = this.map () ->
+      $(this).attr 'href'
+    
+    s = scaling ?= 0.9
+    t = transition ?= 300
+    
+    # Element creator function
+    e = (o) ->
+      o.content = '' unless o.content
+      o.el = 'div' unless o.el
+      attr = for k,v of o
+        if k != 'el' && k != 'content'
+          "#{k}='#{v}'"
+      if o.el != 'img'
+        "<#{o.el} #{attr.join(' ')}>#{o.content}</#{o.el}>"
+      else
+        "<#{o.el} #{attr.join(' ')}/>"
+    
+    # Default elements
+    mblind = e
+      el: 'div'
+      id: 'modal'
+      content: [
+        e
+          el: 'div'
+          id: 'blind'
+          style: "width:#{dw}px; height:#{dh}px"
+        [
+          e
+            el: 'div'
+            class: 'content'
+            content: [
+              e
+                el: 'a'
+                id: 'rw'
+              e
+                el: 'a'
+                id: 'fw'
+            ].join('')
+          e
+            el: 'img'
+        ].join('')
+      ].join('')
+    
+    # Function for scaling the content
+    scale = (img) ->
+      wasp = ww / wh
+      iasp = img.width / img.height
+      nw = ww*s
+      nh = wh*s
+      if wasp > 1
+        nw = nh*iasp
+      else
+        nh = nw/iasp
+      out =
+        top: (wh-nh)/2 + w.scrollTop()
+        left: (ww-nw)/2
+        width: nw
+        height: nh
+    
+    # gallery content
+    this.on 'click', (e) ->
+      e.preventDefault()
+      b.append mblind
+      $('#modal').fadeIn()
+      modal_changer $(this).attr('href')
+      
+    # fw and bw links
+    d.on 'click', '#modal #fw, #modal #rw', (e) ->
+      e.preventDefault()
+      modal_changer $(this).attr('href')
+    
+    # Document modal fader
+    d.on 'click', '#modal', (e) ->
+      if e.target.id != 'fw' && e.target.id != 'rw'
+        $(this).fadeOut 'slow', () ->
+          $(this).remove()
+    
+    #modal changer
+    modal_changer = (href) ->
+      rw = all[$.inArray(href, all)-1] ?= all[all.length-1]
+      fw = all[$.inArray(href, all)+1] ?= all[0]
+      $('#modal #fw').attr href: fw
+      $('#modal #rw').attr href: rw
+      mc = $('#modal .content')
+      mt = $('#modal .temp')
+      temp = e
+        el: 'div'
+        class: 'temp'
+      $('<img/>').attr(src: href).load () ->
+        sc = scale(this)
+        attr =
+          position: 'absolute'
+          display: 'none'
+          left: sc.left
+          top: sc.top
+          width: sc.width
+          height: sc.height
+          'background-image': "url('#{href}')"
+          'background-size': '100%'
+          'z-index': 1
+        if mc.attr 'style'
+          $(temp).insertBefore mc
+          mt.attr style: mc.attr('style')
+        mc.css(attr).fadeIn t, () ->
+          mt.fadeOut t, () ->
+            $(this).remove()
+        $('#modal img').css
+          display:'none'
+        .attr src: href
+    
+    true
