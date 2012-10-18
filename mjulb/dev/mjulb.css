@@ -27,6 +27,7 @@
     font-size: 72px;
     z-index: 2;
     opacity: 0;
+    outline: 0;
     transition: 2s;
     -webkit-transition: 2s;
     -moz-transition: 2s;
