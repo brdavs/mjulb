@@ -49,5 +49,4 @@ $(function() {
 
 ### Contact
 You are welcome to visit http://jqp.herokuapp.com/mjulb for more information.  
-You may contact the author (Tony Anzlovar) at tony [at] formalibre [dot] si.  
-Should you whish to donate to the project - the author accepts alcohol or thc as payment.
+You may contact the author (Tony Anzlovar) at tony [at] formalibre [dot] si.
