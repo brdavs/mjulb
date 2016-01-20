@@ -48,6 +48,6 @@ $(function() {
 5. This software is released under the terms of GPLv3 (http://www.gnu.org/copyleft/gpl.html) or later licence. If you cannot accept the terms offered, you may not use mjulb.
 
 ### Contact
-You are welcome to visit http://http://jqp.herokuapp.com/mjulb for more information.  
+You are welcome to visit http://jqp.herokuapp.com/mjulb for more information.  
 You may contact the author (Tony Anzlovar) at tony [at] formalibre [dot] si.  
 Should you whish to donate to the project - the author accepts alcohol or thc as payment.
